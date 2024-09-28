@@ -167,6 +167,7 @@ def generate_pdf_report_by_category(data):
 
     # Set up styles for the PDF
     styles = getSampleStyleSheet()
+    styles['Normal'].fontSize = 10
 
     # Group games by category
     grouped_games = data.groupby("category")
@@ -192,27 +193,26 @@ def generate_pdf_report_by_category(data):
             # Title for the category
             title = Paragraph(f"Games Report for Category: {category}", styles['Title'])
             content.append(title)
-            content.append(Spacer(1, 0.25 * inch))
+            content.append(Spacer(1, 0.5 * inch))
 
             # Table with game names and last played dates
             table_data = [["Game Name", "Last Played"]]
             for _, row in games.iterrows():
-                table_data.append([Paragraph(row['name'], styles['Normal']), row['last_played']])
+                table_data.append([Paragraph(row['name'], styles['Normal']), Paragraph(row['last_played'], styles['Normal'])])
 
-            table = Table(table_data, colWidths=[5.5 * inch, 2.5 * inch])  # Adjust column widths for letter size
+            table = Table(table_data, colWidths=[5.0 * inch, 2.5 * inch])  # Adjust column widths for letter size
             table.setStyle(TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
                 ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
                 ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, -1), 10),
                 ('BOTTOMPADDING', (0, 0), (-1, 0), 6),
                 ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
                 ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
             ]))
 
             content.append(table)
-            content.append(Spacer(1, 0.25 * inch))
+            content.append(Spacer(1, 0.5 * inch))
 
             # Build the PDF document for this category
             pdf.build(content)
