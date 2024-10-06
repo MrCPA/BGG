@@ -25,7 +25,7 @@ def get_bgg_data(endpoint, username, params=None):
             return response.content
         elif response.status_code == 202:
             print(f"Request for {endpoint} accepted but still processing. Retrying after a short wait.")
-            time.sleep(15)
+            time.sleep(60)
             return get_bgg_data(endpoint, username, params)
         else:
             print(f"Error: Unable to fetch {endpoint} data. Status code: {response.status_code}")
